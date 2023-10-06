@@ -24,17 +24,17 @@ class Tareas {
 
     }
 
-    borraTareas = (id = '') =>  {
-        if(this._listado[id]){
-            delete this._listado[id];
-        }
+    borrarTareas = (id = '') =>  {
+        delete this._listado[id];
     } 
 
 
     cargarTareasFromArray( tareas = [] ){
 
-        this._listado = tareas;
-        
+        tareas.forEach(tarea => {
+            this._listado[tarea.id] = tarea;
+        })
+
     }
 
     crearTarea( desc = '' ) {
@@ -61,7 +61,7 @@ class Tareas {
         this.listadoArr.forEach(({id, desc, completadoEn}) => {
             let validacion = completadoEn? true : false;
             if(completado == validacion){
-                console.log(`${(contador + ".").green} ${desc} :: ${completadoEn? completadoEn : "pendiente".red}`)
+                console.log(`${(contador + ".").green} ${desc} :: ${completadoEn? completadoEn.green : "pendiente".red}`)
                 contador += 1;
             }
 
@@ -69,6 +69,22 @@ class Tareas {
         })
 
 
+    }
+
+    toggleCompletadas( ids = []){
+        ids.forEach(id => {
+
+            const tarea = this._listado[id];
+            if(!tarea.completadoEn){
+                tarea.completadoEn = new Date().toISOString();  
+            }
+        })
+
+        this.listadoArr.forEach(tarea => {
+            if(!ids.includes(tarea.id)){
+                this._listado[tarea.id].completadoEn = null;
+            }
+        })
     }
 
 
